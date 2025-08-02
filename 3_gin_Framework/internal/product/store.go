@@ -34,12 +34,25 @@ func UpdateProduct(p *Product) {
 	p.Price += 2
 }
 
+//put product
+func PutProduct(id int, p *Product) (*Product, bool) {
+	for i, val := range products {
+		if val.ID == id {
+			p.ID = id
+			products[i] = *p
+			return &products[i], true
+
+		}
+	}
+	return nil, false
+}
+
 //Delete product
 func DeleteProductByID(id int) error {
 	for idx, val := range products {
 		if val.ID == id {
-			//remove product at index idx 
-			products=append(products[:idx],products[idx+1:]... )
+			//remove product at index idx
+			products = append(products[:idx], products[idx+1:]...)
 			return nil
 		}
 	}
