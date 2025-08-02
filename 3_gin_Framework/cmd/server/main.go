@@ -5,17 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func main() {
 
-
-
-
-func main(){
-	
-	router:=gin.Default()
+	router := gin.Default()
 	product.RegisterRoutes(router)
-	err :=router.Run("localhost:8080")
-	if err!=nil {
-		panic("Failed to start server"+err.Error())
-	}
 
+	err := router.Run("localhost:8080")
+	if err != nil {
+		panic("Failed to start server" + err.Error())
+	}
 }
