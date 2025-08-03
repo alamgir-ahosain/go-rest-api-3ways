@@ -2,9 +2,12 @@ package services
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/alamgir-ahosain/go-rest-api-3ways/2_gorila_mux/internal/models"
+	"github.com/gorilla/mux"
 )
 
 var products = []models.Product{
@@ -27,26 +30,65 @@ func HandlePreflightRequestFunc(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		return
 	}
-	
+
 }
 
-//make JSON format
+// make JSON format
 func MakeJSONFormatFunc(w http.ResponseWriter, statusCode int) {
 	w.WriteHeader(statusCode)
 	encoder := json.NewEncoder(w)
 	encoder.Encode(products)
 }
 
+// make JSON format
+func JSON_with_threeParameterFunc(w http.ResponseWriter, statusCode int, data interface{}) {
+	w.WriteHeader(statusCode)
+	encoder := json.NewEncoder(w)
+	encoder.Encode(data)
+}
 
-func CreateProductFunc(w http.ResponseWriter,r *http.Request){
+func GetID(w http.ResponseWriter, r *http.Request) (int, error) {
+	ids := mux.Vars(r)
+	idStr := ids["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		//http.Error(w, "invalid product id", http.StatusBadRequest)
+		return 0, fmt.Errorf("invalid product id")
+	}
+	return id, nil
+}
+
+// create product function:post request
+func CreateProductFunc(w http.ResponseWriter, r *http.Request) {
 	var newProduct models.Product
-	decoder:=json.NewDecoder(r.Body)
-	err:=decoder.Decode(&newProduct)
-	if err!=nil{
-		http.Error(w,"Give  the valid json format",400)
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&newProduct)
+	if err != nil {
+		http.Error(w, "Give  the valid json format", 400)
 		return
 	}
 
-	products=append(products, newProduct)
-	MakeJSONFormatFunc(w,201)
+	products = append(products, newProduct)
+	MakeJSONFormatFunc(w, 201)
+}
+
+// get product with id function
+func GetProductWithIDFunc(id int) (models.Product, error) {
+	for i, val := range products {
+		if val.ID == id {
+			return products[i], nil
+		}
+	}
+	return models.Product{}, fmt.Errorf("product with ID %d not found", id)
+}
+
+// Patch request: partial update
+func PatchProductFunc(id int)(models.Product,error) {
+	for i, val := range products {
+		if val.ID == id {
+			products[i].Price += 2
+			return products[i], nil
+		}
+	}
+	return models.Product{}, fmt.Errorf("product with ID %d not found", id)
 }
