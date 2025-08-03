@@ -1,7 +1,22 @@
-## REST API with mux
+## REST API 
+>Simple RESTful API to create, read, update and delete books. No database implementation yet
 
-This is a simple REST API with [mux](https://github.com/gorilla/mux).
- ## Project Structure
+ ### 1. Install Dependencies
+ ### For Gin
+ ```bash
+go get -u github.com/gin-gonic/gin
+```
+### For Gorilla Mux
+```bash
+go get -u github.com/gorilla/mux
+```
+### 2. Run the Application
+Start the application using the following command:
+
+```bash
+go run main.go
+```
+ ## 3. Project Structure
  
 ```plaintext
 3_gin_Framework/
@@ -22,7 +37,7 @@ This is a simple REST API with [mux](https://github.com/gorilla/mux).
 ├── go.sum                 # Go dependencies checksums
 └── README.md              # Project readme file
 ```
-## api endpoints table
+## 4. api endpoints table
 
 |     | method | endpoint       | description               |
 | --- | ------ | -------------- | ------------------------- |
@@ -33,7 +48,7 @@ This is a simple REST API with [mux](https://github.com/gorilla/mux).
 | 5   | PATCH  | /products/{id} | partial product by id     |
 | 6   | DELETE | /products/{id} | delete product by id      |
 
-## Api structure
+## Product Data
 
 ```go
 type Product struct {
