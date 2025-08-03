@@ -1,25 +1,29 @@
-## REST API 
->Simple RESTful API to create, read, update and delete books. No database implementation yet
+## Go REST API 
+>A RESTful API built using the Go standard library, Gorilla Mux, and Gin to create, read, update, and delete products.<br>**No database implementation yet**.
 
- ### 1. Install Dependencies
- ### For Gin
+## Installation
+1. **Clone the Repository**
+ ```bash
+https://github.com/alamgir-ahosain/go-rest-api-3ways.git
+```
+2. **Install Dependencies**<br>
+
+**For Gin**
  ```bash
 go get -u github.com/gin-gonic/gin
 ```
-### For Gorilla Mux
+**For Gorilla Mux**
 ```bash
 go get -u github.com/gorilla/mux
 ```
-### 2. Run the Application
-Start the application using the following command:
-
+3. **Run the Application:** 
 ```bash
 go run main.go
 ```
- ## 3. Project Structure
+ ##  Project Structure
  
 ```plaintext
-3_gin_Framework/
+1_standardWay/
 ├── cmd/
 │   └── myApp/
 │       └── main.go        # main file
@@ -37,18 +41,18 @@ go run main.go
 ├── go.sum                 # Go dependencies checksums
 └── README.md              # Project readme file
 ```
-## 4. api endpoints table
+##  api endpoints table
 
-|     | method | endpoint       | description               |
-| --- | ------ | -------------- | ------------------------- |
-| 1   | GET    | /products      | get all products          |
-| 2   | GET    | /products/{id} | get product by id         |
-| 3   | POST   | /products/{id} | create new product        |
-| 4   | PUT    | /products/{id} | full update product by id |
-| 5   | PATCH  | /products/{id} | partial product by id     |
-| 6   | DELETE | /products/{id} | delete product by id      |
+| number | method | endpoint       | description                      |
+| ------ | ------ | -------------- | -------------------------------- |
+|    1   | GET    | /products      | get all products                 |
+|    2   | GET    | /products/{id} | get product by id                |
+|    3   | POST   | /products/{id} | create new product               |
+|    4   | PUT    | /products/{id} | full update product by id        |
+|    5   | PATCH  | /products/{id} | partial update product by id     |
+|    6   | DELETE | /products/{id} | delete product by id             |
 
-## Product Data
+##  Product Data
 
 ```go
 type Product struct {
@@ -58,3 +62,6 @@ type Product struct {
 }
 
 ```
+
+# Thank You for Checking Out This Repository!
+Your feedback is valuable! Please share your thoughts and suggestions for improvement by creating a pull request.
