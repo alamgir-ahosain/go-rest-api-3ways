@@ -6,6 +6,7 @@ import (
 	"github.com/alamgir-ahosain/go-rest-api-3ways/2_gorila_mux/internal/services"
 )
 
+//GET request: get all products
 func GetProducts(w http.ResponseWriter, r *http.Request) {
 	services.HandleCORSFunc(w)                //handle CORS error
 	services.HandlePreflightRequestFunc(w, r) //handle Preflight request: for option method
@@ -31,15 +32,11 @@ func CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// get aa product with Id
+// get a product with Id
 func GetProductWithID(w http.ResponseWriter, r *http.Request) {
-	services.HandleCORSFunc(w)
-	services.HandlePreflightRequestFunc(w, r)
-
-	id, err := services.GetID(w, r)
-	if err != nil {
-		http.Error(w, "invalid product id", http.StatusBadRequest)
-		return
+	id := error_and_FindID(w, r)
+	if id == 0 {
+		return //error already hanlded in function:error_and_FindID
 	}
 	pr, err2 := services.GetProductWithIDFunc(id)
 	if err2 != nil {
@@ -52,13 +49,9 @@ func GetProductWithID(w http.ResponseWriter, r *http.Request) {
 
 // PUT request:partial update
 func PatchProduct(w http.ResponseWriter, r *http.Request) {
-	services.HandleCORSFunc(w)
-	services.HandlePreflightRequestFunc(w, r)
-
-	id, err := services.GetID(w, r)
-	if err != nil {
-		http.Error(w, "invalid product id", http.StatusBadRequest)
-		return
+	id := error_and_FindID(w, r)
+	if id == 0 {
+		return //error already hanlded in function:error_and_FindID
 	}
 	pr, err2 := services.PatchProductFunc(id)
 	if err2 != nil {
@@ -71,16 +64,32 @@ func PatchProduct(w http.ResponseWriter, r *http.Request) {
 
 // PUT request: full update or replce the entire object
 func PutProduct(w http.ResponseWriter, r *http.Request) {
-	services.HandleCORSFunc(w)
-	services.HandlePreflightRequestFunc(w, r)
-	id, err := services.GetID(w, r)
-	if err != nil {
-		http.Error(w, "invalid product id", http.StatusBadRequest)
-		return
+	id := error_and_FindID(w, r)
+	if id == 0 {
+		return //error already hanlded in function:error_and_FindID
 	}
 	services.PutProductFunc(w, r, id)
 
 }
 
 // delete a specific product
-func DeleteProduct(w http.ResponseWriter, r *http.Request) {}
+func DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	id := error_and_FindID(w, r)
+	if id == 0 {
+		return //error already hanlded in function:error_and_FindID
+	}
+	services.DeleteProductFunc(w, r, id)
+
+}
+
+//helper function
+func error_and_FindID(w http.ResponseWriter, r *http.Request) int {
+	services.HandleCORSFunc(w)
+	services.HandlePreflightRequestFunc(w, r)
+	id, err := services.GetID(w, r)
+	if err != nil {
+		http.Error(w, "invalid product id", http.StatusBadRequest)
+		return 0
+	}
+	return id
+}
