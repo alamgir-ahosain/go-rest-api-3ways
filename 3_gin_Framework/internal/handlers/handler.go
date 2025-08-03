@@ -1,48 +1,40 @@
-package product
+package handlers
 
 import (
 	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/alamgir-ahosain/go-rest-api-3ways/3_gin_Framework/internal/models"
+	"github.com/alamgir-ahosain/go-rest-api-3ways/3_gin_Framework/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(r *gin.Engine) {
-	r.GET("/products", getProducts)
-	r.POST("/products", addProduct) //create new one
-	r.GET("/products/:id", getProduct)
-	r.PATCH("/products/:id", updateProduct) //partial update
-	r.PUT("/products/:id", putProduct)      //full update or replace the entire object
-	r.DELETE("/products/:id", deleteProduct)
-
-}
-
 // GET request
-func getProducts(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, List()) //code :200
+func GetProducts(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, services.List()) //code :200
 }
 
 // POST request
-func addProduct(c *gin.Context) {
+func AddProduct(c *gin.Context) {
 
-	var newProduct Product
+	var newProduct models.Product
 	err := c.BindJSON(&newProduct)
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{"Eor:": err.Error()})
 		return
 	}
-	Add(newProduct)
+	services.Add(newProduct)
 	c.IndentedJSON(http.StatusCreated, newProduct) //code:201
 }
 
 // GET with id
-func getProduct(c *gin.Context) {
+func GetProduct(c *gin.Context) {
 
 	fmt.Println("getProduct() called") // Add this line
 	idParam := c.Param("id")
 	id, _ := strconv.Atoi(idParam)
-	pr, err := GetProductByID(id)
+	pr, err := services.GetProductByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"Error:": err.Error()})
 		return
@@ -51,20 +43,20 @@ func getProduct(c *gin.Context) {
 }
 
 // PATCH request
-func updateProduct(c *gin.Context) {
+func UpdateProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	id, _ := strconv.Atoi(idParam)
-	pr, err := GetProductByID(id)
+	pr, err := services.GetProductByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"Error:": err.Error()})
 		return
 	}
-	UpdateProduct(pr)
+	services.UpdateProduct(pr)
 	c.IndentedJSON(http.StatusOK, pr) //code :200
 }
 
 // PUT request
-func putProduct(c *gin.Context) {
+func PutProduct(c *gin.Context) {
 	idPam := c.Param("id")
 	id, err := strconv.Atoi(idPam)
 	if err != nil {
@@ -72,14 +64,14 @@ func putProduct(c *gin.Context) {
 		return
 	}
 
-	var newProduct Product
+	var newProduct models.Product
 	err2 := c.BindJSON(&newProduct)
 	if err2 != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Error:": err2.Error()})
 		return
 	}
 
-	updateProduct, updated := PutProduct(id, &newProduct)
+	updateProduct, updated := services.PutProduct(id, &newProduct)
 	if updated {
 		c.JSON(http.StatusOK, updateProduct)
 	} else {
@@ -89,10 +81,10 @@ func putProduct(c *gin.Context) {
 }
 
 // DELETE request
-func deleteProduct(c *gin.Context) {
+func DeleteProduct(c *gin.Context) {
 	idParam := c.Param("id")
 	id, _ := strconv.Atoi(idParam)
-	err := DeleteProductByID(id)
+	err := services.DeleteProductByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"Error:": err.Error()})
 		return

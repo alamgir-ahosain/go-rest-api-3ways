@@ -1,26 +1,30 @@
-package product
+package services
 
-import "fmt"
+import (
+	"fmt"
 
-var products = []Product{
+	"github.com/alamgir-ahosain/go-rest-api-3ways/3_gin_Framework/internal/models"
+)
+
+var products = []models.Product{
 	{ID: 1, Name: "Apple", Price: 10},
 	{ID: 2, Name: "Mango", Price: 20},
 	{ID: 3, Name: "Jack Fruit", Price: 100},
 }
 
 // List return all product
-func List() []Product {
+func List() []models.Product {
 	return products
 }
 
 // add product
-func Add(p Product) {
+func Add(p models.Product) {
 	products = append(products, p)
 
 }
 
 //get product
-func GetProductByID(id int) (*Product, error) {
+func GetProductByID(id int) (*models.Product, error) {
 	for idx, val := range products {
 		if val.ID == id {
 			return &products[idx], nil
@@ -30,12 +34,12 @@ func GetProductByID(id int) (*Product, error) {
 }
 
 //update product
-func UpdateProduct(p *Product) {
+func UpdateProduct(p *models.Product) {
 	p.Price += 2
 }
 
 //put product
-func PutProduct(id int, p *Product) (*Product, bool) {
+func PutProduct(id int, p *models.Product) (*models.Product, bool) {
 	for i, val := range products {
 		if val.ID == id {
 			p.ID = id
