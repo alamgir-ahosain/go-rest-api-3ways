@@ -69,8 +69,18 @@ func PatchProduct(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//PUT request: full update or replce the entire object
+// PUT request: full update or replce the entire object
 func PutProduct(w http.ResponseWriter, r *http.Request) {
+	services.HandleCORSFunc(w)
+	services.HandlePreflightRequestFunc(w, r)
+	id, err := services.GetID(w, r)
+	if err != nil {
+		http.Error(w, "invalid product id", http.StatusBadRequest)
+		return
+	}
+	services.PutProductFunc(w, r, id)
 
 }
+
+// delete a specific product
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {}

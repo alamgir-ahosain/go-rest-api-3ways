@@ -47,6 +47,7 @@ func JSON_with_threeParameterFunc(w http.ResponseWriter, statusCode int, data in
 	encoder.Encode(data)
 }
 
+// get id
 func GetID(w http.ResponseWriter, r *http.Request) (int, error) {
 	ids := mux.Vars(r)
 	idStr := ids["id"]
@@ -83,7 +84,7 @@ func GetProductWithIDFunc(id int) (models.Product, error) {
 }
 
 // Patch request: partial update
-func PatchProductFunc(id int)(models.Product,error) {
+func PatchProductFunc(id int) (models.Product, error) {
 	for i, val := range products {
 		if val.ID == id {
 			products[i].Price += 2
@@ -91,4 +92,27 @@ func PatchProductFunc(id int)(models.Product,error) {
 		}
 	}
 	return models.Product{}, fmt.Errorf("product with ID %d not found", id)
+}
+
+// PUT product function
+func PutProductFunc(w http.ResponseWriter, r *http.Request, id int) {
+	var newProduct models.Product
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&newProduct)
+	if err != nil {
+		http.Error(w, "Give  the valid json format", 400)
+		return
+	}
+
+	for i, val := range products {
+		if val.ID == id {
+			val.ID = id
+			products[i] = newProduct
+			JSON_with_threeParameterFunc(w, 201, newProduct)
+			return
+
+		}
+	}
+
+	JSON_with_threeParameterFunc(w, 201, newProduct)
 }
