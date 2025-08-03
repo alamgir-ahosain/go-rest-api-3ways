@@ -14,7 +14,7 @@ var products = []models.Product{
 }
 
 // Handle CORS error
-func HandleCORS(w http.ResponseWriter) {
+func HandleCORSFunc(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")                                  //set header: (*) anyone can access th
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,Alamgir-CustomHeader") //allow content type
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS") //allow content type
@@ -22,20 +22,31 @@ func HandleCORS(w http.ResponseWriter) {
 }
 
 // Handle Preflight Request for option method
-func HandlePreflightRequest(w http.ResponseWriter, r *http.Request) {
+func HandlePreflightRequestFunc(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
 		w.WriteHeader(200)
 		return
 	}
-
-	if r.Method != http.MethodGet {
-		http.Error(w, "only GET request are allowed", 400)
-		return
-	}
+	
 }
 
-func GetProduct(w http.ResponseWriter, statusCode int) {
+//make JSON format
+func MakeJSONFormatFunc(w http.ResponseWriter, statusCode int) {
 	w.WriteHeader(statusCode)
 	encoder := json.NewEncoder(w)
 	encoder.Encode(products)
+}
+
+
+func CreateProductFunc(w http.ResponseWriter,r *http.Request){
+	var newProduct models.Product
+	decoder:=json.NewDecoder(r.Body)
+	err:=decoder.Decode(&newProduct)
+	if err!=nil{
+		http.Error(w,"Give  the valid json format",400)
+		return
+	}
+
+	products=append(products, newProduct)
+	MakeJSONFormatFunc(w,201)
 }

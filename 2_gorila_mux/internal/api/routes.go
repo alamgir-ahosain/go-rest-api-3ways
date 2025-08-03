@@ -6,5 +6,7 @@ import (
 )
 
 func RegisterRoutes(r *mux.Router) {
-	r.HandleFunc("/products",handlers.GetProducts)
+	r.HandleFunc("/products",handlers.GetProducts).Methods("GET")
+	r.HandleFunc("/products",handlers.CreateProduct).Methods("POST")
+	
 }
