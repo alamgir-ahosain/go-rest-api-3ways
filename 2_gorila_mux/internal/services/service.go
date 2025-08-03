@@ -116,3 +116,14 @@ func PutProductFunc(w http.ResponseWriter, r *http.Request, id int) {
 
 	JSON_with_threeParameterFunc(w, 201, newProduct)
 }
+
+// delete specific product
+func DeleteProductFunc(w http.ResponseWriter,r *http.Request,id int) {
+	for i, val := range products {
+		if val.ID == id {
+			JSON_with_threeParameterFunc(w, 201, products[i])
+			products = append(products[:i], products[i+1:]...)
+		}
+	}
+
+}
