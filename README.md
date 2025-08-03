@@ -1,7 +1,27 @@
 ## REST API with mux
 
 This is a simple REST API with [mux](https://github.com/gorilla/mux).
-
+ ## Project Structure
+ 
+```plaintext
+3_gin_Framework/
+├── cmd/
+│   └── myApp/
+│       └── main.go        # main file
+├── internal/
+│   ├── api/
+│   │   └── routes.go      # API routes 
+│   ├── handlers/
+│   │   └── handler.go     # HTTP handlers
+│   ├── models/
+│   │   └── model.go       # Data models
+│   └── services/
+│       └── service.go     # Business logic 
+├── .gitignore             # Git ignore file
+├── go.mod                 # Go module definition
+├── go.sum                 # Go dependencies checksums
+└── README.md              # Project readme file
+```
 ## api endpoints table
 
 |     | method | endpoint       | description               |
